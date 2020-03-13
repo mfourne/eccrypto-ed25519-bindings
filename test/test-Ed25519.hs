@@ -30,7 +30,7 @@ import qualified Crypto.Fi as FP
 
 main::IO ()
 main = do
-  putStrLn "generate keys with homegrown code"
+  putStrLn "\ngenerate keys with homegrown code"
   let m = BS.pack [0..255]
   putStrLn $ "message m is: " ++ (show m)
   Right (SecKeyBytes sk2,pk2) <- genkeys
@@ -43,26 +43,26 @@ main = do
   let Right mypk2 = bstopoint pk2
       Right mysk2 = bstopoint sk2
   putStrLn $ "own generated public key point is on curve: " ++ (show $ ison mypk2)
-  putStrLn "___tests with foreign keys___"
+  putStrLn "\n___tests with foreign keys___"
   putStrLn "generate keys with foreign code"
-  (pk,sk) <- R.createKeypair
+  (R.PublicKey pk,sk) <- R.createKeypair
   print sk
   -- let skre = bstopoint (BS.take 32 $ R.unSecretKey sk)
   -- print $ show skre
   print pk
-  let Right pkre = bstopoint (R.unPublicKey pk)
+  let Right pkre = bstopoint pk
   putStrLn $ "pk re-encode sieht aus:  " ++ (show $ pointtobs pkre)
   putStrLn $ "pk regenerate:     " ++ (show $ publickey (SecKeyBytes (R.unSecretKey sk)))
-  let sig = R.dsign sk m
+  let (R.Signature sig) = R.dsign sk m
   print sig
-  putStrLn $ "Sig ist ok? " ++ (show $ R.dverify pk m sig)
-  putStrLn $ "Sig ist ok, crosstest? " ++ (show $ dverify (R.unPublicKey pk) (R.unSignature sig) m)
+  putStrLn $ "Sig ist ok? " ++ (show $ R.dverify (R.PublicKey pk) m (R.Signature sig))
+  putStrLn $ "Sig ist ok, crosstest? " ++ (show $ RN.dverify (RN.PublicKey pk) m (RN.Signature sig))
   let sig0 = dsign (SecKeyBytes (BS.take 32 (R.unSecretKey sk))) m
   putStrLn $ "nachgebaute sig:   " ++ (show sig0)
   case sig0 of
     Right s -> do
-      putStrLn $ "Sig ist ok? " ++ (show $ dverify (R.unPublicKey pk) s m)
-      putStrLn $ "Sig ist ok, crosstest? " ++ (show $ R.dverify pk m (R.Signature s))
+      putStrLn $ "Sig ist ok? " ++ (show $ RN.dverify (RN.PublicKey pk) m (RN.Signature s))
+      putStrLn $ "Sig ist ok, crosstest? " ++ (show $ R.dverify (R.PublicKey pk) m (R.Signature s))
     Left e -> print e
 {-
   putStrLn "___reverse engineer parts from other libs___"
