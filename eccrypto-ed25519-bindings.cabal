@@ -2,14 +2,14 @@
 -- further documentation, see http://haskell.org/cabal/users-guide/
 
 name:                eccrypto-ed25519-bindings
-version:             0.1.2.0
+version:             0.1.2.1
 synopsis:            provides "ed25519" API using "eccrypto"
 description:         These are bindings providing the functionality of the "ed25519" package using a pure Haskell implementation from the "eccrypto" package.
 license:             BSD3
 license-file:        LICENSE
 author:              Marcel Fourné
-maintainer:          haskell@marcelfourne.de
-copyright:           Marcel Fourné
+maintainer:          Marcel Fourné (haskell@marcelfourne.de)
+copyright:       (c) Marcel Fourné 2020-2025
 category:            Cryptography
 build-type:          Simple
 extra-source-files:  ChangeLog.md
@@ -21,8 +21,8 @@ library
   -- other-modules:
   -- other-extensions:
   build-depends:
-                base >=4.11 && <4.13
-              , bytestring >= 0.10 && < 0.11
+                base >=4.11 && <5
+              , bytestring >= 0.10 && < 0.13
               , eccrypto >=0.2.2 && <0.3
 
   hs-source-dirs:      src
